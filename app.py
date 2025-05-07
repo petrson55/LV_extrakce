@@ -1,4 +1,27 @@
 import streamlit as st
+import shutil
+import subprocess
+
+st.sidebar.markdown("### 🛠 Kontrola prostředí")
+
+pdftoppm_path = shutil.which("pdftoppm")
+tesseract_path = shutil.which("tesseract")
+
+st.sidebar.write("🔍 pdftoppm:", pdftoppm_path or "Nenalezeno")
+st.sidebar.write("🔍 tesseract:", tesseract_path or "Nenalezeno")
+
+try:
+    subprocess.run(["pdftoppm", "-v"], check=True, capture_output=True)
+    st.sidebar.success("✅ Poppler (pdftoppm) funguje")
+except Exception as e:
+    st.sidebar.error(f"❌ Poppler nefunguje: {e}")
+
+try:
+    subprocess.run(["tesseract", "-v"], check=True, capture_output=True)
+    st.sidebar.success("✅ Tesseract funguje")
+except Exception as e:
+    st.sidebar.error(f"❌ Tesseract nefunguje: {e}")
+
 import pdfplumber
 import pytesseract
 from pdf2image import convert_from_bytes
